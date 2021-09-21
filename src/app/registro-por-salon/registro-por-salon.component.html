@@ -1,0 +1,61 @@
+<app-navbar></app-navbar>
+
+
+<div class="main-panel mt-3 bg-white p-3">
+
+    <a routerLink="/panel-principal" class="btn btn-danger btn-sm">
+        <span class="material-icons" style="font-size: 16px;" >arrow_back</span>
+    </a>
+
+    <div class="text-center">
+        <h2 class="mt-2">Registro de horario por salón</h2>
+    </div>
+
+    <hr>    
+
+    <h6 class="mb-3"><b>Fecha:</b> {{fechaTxt}}</h6>
+
+    <div class="row mb-3">
+        <div class="col-12 col-md-1 col-lg-1 text-center pt-2">
+            <h6><b>Salón:</b></h6>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+            <select class="custom-select" id="salonSelect" (change)="getHoraiosSalon()">
+                <option value="">Selecciona un salón....</option>
+                <ng-container *ngFor="let salon of salones">
+                    <option value="{{salon.id}}">{{salon.nombre}}</option>
+                </ng-container>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-responsive" *ngIf="horarios.length > 0">
+        <table class="table table-bordered text-center">
+          <thead class="thead-dark">
+            <tr>
+              <th>Nombre</th>
+              <th>Profesor</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let horario of horarios">
+                <tr class="{{horario.color}} text-white">
+                    <td>
+                        <h5>{{horario.curso.nombre}}</h5>
+                        <h6 class="font-italic">{{horario.salon.nombre}} - {{horario.salon.ubicacion}} ({{horario.salon.capacidad}} estudiantes)</h6>
+                    </td>
+                    <td>
+                        <h6>{{horario.profesor}}</h6>
+                    </td>
+                    <td>
+                        <h6>{{horario.fechaTxt}},</h6>
+                        <h6>{{horario.horaInicio}} - {{horario.horaFinal}}</h6>
+                    </td>
+                </tr>
+            </ng-container>
+          </tbody>
+        </table>
+    </div>
+
+</div>

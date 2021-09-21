@@ -1,0 +1,221 @@
+<app-navbar></app-navbar>
+
+
+<div class="main-panel mt-3 bg-white p-3">
+
+    <a routerLink="/panel-principal" class="btn btn-danger btn-sm">
+        <span class="material-icons" style="font-size: 16px;" >arrow_back</span>
+    </a>
+
+    <div class="text-center">
+        <h2 class="mt-2">Administracion de horario</h2>
+    </div>
+
+    <hr>
+
+    <!-- Button to Open the Modal -->
+  <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addHorarioModal">
+    Crear horario
+  </button>
+
+    <!-- The Modal Add -->
+    <div class="modal fade" id="addHorarioModal">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+            
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Crear horario</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form ngNativeValidate #addHorario="ngForm" (ngSubmit)="postHorario()">
+
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label for="curso">Curso:</label>
+                                <select class="custom-select" [(ngModel)]="curso" name="curso">
+                                    <ng-container *ngFor="let curso of cursos">
+                                        <option value="{{curso.id}}">{{curso.nombre}}</option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label for="salon">Salón:</label>
+                                <select class="custom-select" [(ngModel)]="salon" name="salon">
+                                    <ng-container *ngFor="let salon of salones">
+                                        <option value="{{salon.id}}">{{salon.nombre}} - {{salon.ubicacion}}</option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="profesor" class="mb-1">Profesor:</label>
+                            <input type="text" [(ngModel)]="profesor" name="profesor" class="form-control" id="profesor" placeholder="Profesor" maxlength="50" required autocomplete="off">
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 col-lg-5">
+                                <div class="form-group mb-3">
+                                    <label for="fecha" class="mb-1">Fecha:</label>
+                                    <input type="date" min="{{fecha}}" name="fecha" class="form-control" id="fecha" required autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <label for="user" class="mb-1">Hora de inicio:</label>
+                                <select class="custom-select" id="horaInicio">
+                                    <option value="6">06:00 a.m</option>
+                                    <option value="7">07:00 a.m</option>
+                                    <option value="8">08:00 a.m</option>
+                                    <option value="9">09:00 a.m</option>
+                                    <option value="10">10:00 a.m</option>
+                                    <option value="11">11:00 a.m</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="form-group mb-3">
+                                    <label for="horas" class="mb-1">Número de horas:</label>
+                                    <input type="number" [(ngModel)]="horas" name="horas" class="form-control" id="horas" min="1" max="4" required>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        <div class="text-center mt-4">
+                            <button class="btn btn-success mr-2" type="submit" [disabled]="addHorario.invalid">Crear</button>
+                            <button type="button" id="btnCerrarModalAdd" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal Edit-->
+    <div class="modal fade" id="editHorarioModal">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+            
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar horario</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form ngNativeValidate #editHorario="ngForm" (ngSubmit)="putHorario()">
+
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label for="curso">Curso:</label>
+                                <select class="custom-select" [(ngModel)]="cursoEdit" name="curso">
+                                    <ng-container *ngFor="let curso of cursos">
+                                        <option value="{{curso.id}}">{{curso.nombre}}</option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <label for="salon">Salón:</label>
+                                <select class="custom-select" [(ngModel)]="salonEdit" name="salon">
+                                    <ng-container *ngFor="let salon of salones">
+                                        <option value="{{salon.id}}">{{salon.nombre}} - {{salon.ubicacion}}</option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="profesor" class="mb-1">Profesor:</label>
+                            <input type="text" [(ngModel)]="profesorEdit" name="profesor" class="form-control" id="profesor" placeholder="Profesor" maxlength="50" required autocomplete="off">
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 col-lg-5">
+                                <div class="form-group mb-3">
+                                    <label for="fecha" class="mb-1">Fecha:</label>
+                                    <input type="date" min="{{fecha}}" name="fecha" class="form-control" id="fechaEdit" required autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <label for="user" class="mb-1">Hora de inicio:</label>
+                                <select class="custom-select" id="horaInicioEdit">
+                                    <option value="6">06:00 a.m</option>
+                                    <option value="7">07:00 a.m</option>
+                                    <option value="8">08:00 a.m</option>
+                                    <option value="9">09:00 a.m</option>
+                                    <option value="10">10:00 a.m</option>
+                                    <option value="11">11:00 a.m</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3">
+                                <div class="form-group mb-3">
+                                    <label for="horas" class="mb-1">Número de horas:</label>
+                                    <input type="number" [(ngModel)]="horasEdit" name="horas" class="form-control" id="horas" min="1" max="4" required>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        <div class="text-center mt-4">
+                            <button class="btn btn-success mr-2" type="submit" [disabled]="editHorario.invalid">Crear</button>
+                            <button type="button" id="btnCerrarModalEdit" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive" *ngIf="horarios.length > 0">
+        <table class="table table-bordered text-center">
+          <thead>
+            <tr>
+              <th style="width: 75px;">ID</th>
+              <th>Nombre</th>
+              <th>Profesor(a)</th>
+              <th>Fecha</th>
+              <th style="width: 120px;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let horario of horarios">
+                <td>{{horario.id}}</td>
+                <td>
+                    <h5>{{horario.curso.nombre}} </h5>
+                    <h6 class="font-italic">{{horario.salon.nombre}} - {{horario.salon.ubicacion}} ({{horario.salon.capacidad}} estudiantes)</h6>
+                </td>
+                <td>
+                    <h6>{{horario.profesor}}</h6>
+                </td>
+                <td>
+                    <h6>{{horario.fechaTxt}},</h6>
+                    <h6>{{horario.horaInicio}} - {{horario.horaFinal}}</h6>
+                </td>
+                <td> 
+                    <button type="button" (click)="getHorarioSelected(horario)" class="btn btn-info btn-sm mr-2" data-toggle="modal" data-target="#editHorarioModal">
+                        <span class="material-icons">edit</span>
+                    </button>
+                    <button (click)="deleteHorario(horario.id)" type="button" class="btn btn-danger btn-sm">
+                        <span class="material-icons">delete</span>
+                    </button>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+
+    <div class="p-5 text-center" *ngIf="horarios.length == 0">
+        <span class="material-icons" style="font-size: 50px;">sentiment_dissatisfied</span>
+        <h4>No hay horarios...</h4>
+    </div>
+
+</div>
+
